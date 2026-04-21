@@ -75,13 +75,27 @@ public:
             }
         }
 
-    }
+
+        void repartir_goles(){
+            if(contador_jugadores == 0){return;}
+            int goles_base = goles_favor / contador_jugadores;
+            int goles_sobrantes = goles_favor % contador_jugadores;
+
+            for(int i = 0; i < contador_jugadores;i++){
+                plantilla[i]->goles = goles_base;
+
+                if(i < goles_sobrantes){
+                    plantilla[i]->goles += 1;
+                }
+            }
+        }
+
+    };
 
 
 
 
 
 
-
-}
+};
 #endif // CLASES_H
