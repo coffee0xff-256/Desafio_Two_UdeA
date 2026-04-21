@@ -7,4 +7,5 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
-    clases.h
+    clases.h \
+    funciones_auxiliares.h

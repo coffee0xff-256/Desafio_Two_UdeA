@@ -34,6 +34,7 @@ public:
         nombre = "";
         apellido = "";
     }
+};
 
     class equipo{
     public:
@@ -95,7 +96,4 @@ public:
 
 
 
-
-
-};
 #endif // CLASES_H
