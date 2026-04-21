@@ -35,6 +35,47 @@ public:
         apellido = "";
     }
 
+    class equipo{
+    public:
+        string pais;
+        string dt;
+        int ranking;
+        int goles_favor;
+
+        //ema aqui viene la cosa, por cada equipo tenemos 26 jugadores así que lo que haremos será un arreglo dinamico para
+        // esos jugadores que son 26
+
+        jugador* plantilla[26];
+        int contador_jugadores;
+
+        //constructor otra vez
+
+        //aqui ema aunque inialice todo en 0 , cuando leemos los csv los arreglamos;
+
+        equipo(){
+            ranking = 0;
+            goles_favor=0;
+            contador_jugadores=0;
+            pais="";
+            dt = "";
+
+            for(int i = 0; i < 26; i++){
+                plantilla[i] = nullptr;
+
+            }
+        }
+
+        //destructor emma importante
+
+        ~equipo(){
+            for(int i = 0; i < contador_jugadores ; i++){
+                if(plantilla[i] != nullptr){
+                    delete plantilla[i];
+                }
+            }
+        }
+
+    }
 
 
 
