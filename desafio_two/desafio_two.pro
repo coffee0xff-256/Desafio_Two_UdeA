@@ -1,0 +1,11 @@
+TEMPLATE = app
+CONFIG += console c++17
+CONFIG -= app_bundle
+CONFIG -= qt
+
+SOURCES += \
+        main.cpp
+
+HEADERS += \
+    clases.h \
+    funciones_auxiliares.h
