@@ -5,15 +5,15 @@
 #include <cstdlib>
 #include <ctime>
 #include "clases.h"
-
+#include <fstream>
 //Mate acá hago el nodo de la lista enlazada como en el code anterior
 template<typename T>
 class Nodo {
 public:
-    T        dato;
+    T dato;
     Nodo<T>* sig;
 
-    Nodo(const T& d) : dato(d), sig(nullptr) {}
+    Nodo(const T& d):dato(d), sig(nullptr) {}
 };
 
 
@@ -24,8 +24,8 @@ class Lista {
     int      tam;
 
 public:
-    Lista()  : cabeza(nullptr), tam(0) {}
-    ~Lista() { vaciar(); }
+    Lista():cabeza(nullptr), tam(0) {}
+    ~Lista(){ vaciar(); }
 
     Lista(const Lista&)            = delete;
     Lista& operator=(const Lista&) = delete;
@@ -83,10 +83,10 @@ public:
             aux[i] = (*this)[i];
 
         for (int i = tamano - 1; i > 0; i--) {
-            int j    = rand() % (i + 1);
-            T   temp = aux[i];
-            aux[i]   = aux[j];
-            aux[j]   = temp;
+            int j = rand() % (i + 1);
+            T temp = aux[i];
+            aux[i]= aux[j];
+            aux[j]= temp;
         }
         vaciar();
         for (int i = 0; i < tamano; i++)
@@ -103,8 +103,8 @@ public:
         tam = 0;
     }
 
-    int  tamano() const { return tam;       }
-    bool vacia()  const { return tam == 0;  }
+    int  tamano() const {return tam;}
+    bool vacia() const {return tam == 0;}
 };
 
 
@@ -113,20 +113,20 @@ public:
 
 
 class Bombo {
-    int            numero;
+    int numero;
     Lista<equipo*> equipos;
 
 public:
     Bombo(int num) : numero(num) {}
-    Bombo(const Bombo&)            = delete;
+    Bombo(const Bombo&)= delete;
     Bombo& operator=(const Bombo&) = delete;
 
-    void agregar(equipo* e) { equipos.agregar(e);  }
-    void mezclar()          { equipos.mezclar();   }
+    void agregar(equipo* e) { equipos.agregar(e);}
+    void mezclar()          { equipos.mezclar();}
 
-    int     getNumero() const   { return numero;           }
-    int     tamano()    const   { return equipos.tamano(); }
-    equipo* operator[](int i)   { return equipos[i];       }
+    int getNumero() const{ return numero;}
+    int tamano() const{ return equipos.tamano(); }
+    equipo* operator[](int i)   { return equipos[i];}
 
     void imprimir() const {
         cout << "\nBombo " << numero << " (" << equipos.tamano() << " equipos)\n";
@@ -141,7 +141,7 @@ public:
 
 // Creacion de bombos con las restricciones del Doc y hace que todo quede como se requiere.
 class Grupo {
-    char           letra;
+    char letra;
     Lista<equipo*> equipos;
 
     int contarDeConf(const string& conf) const {
@@ -159,7 +159,9 @@ public:
 
     char getLetra() const { return letra;            }
     int  tamanio()  const { return equipos.tamano(); }
-    void vaciar()         { equipos.vaciar();         }
+    void vaciar() { equipos.vaciar();}
+    //Creacion del getEquipo
+    equipo* getEquipo(int i) const{return equipos[i];}
 
     bool puedeAgregar(equipo* e) const {
         int yaHay = contarDeConf(e->confederacion);
@@ -296,12 +298,31 @@ public:
             cout << "Sorteo completado en la primera iteracion";
         else
             cout << "Sorteo completado (" << intentos << " reintentos\n";
+
+        guardarSorteo();
     }
 
     void imprimirbombos() const {
         cout <<"Sorteo de los bombos";
         for (int i = 0; i < total_bombos; i++)
             bombos[i]->imprimir();
+    }
+    //Funcón para guardar los bombos en cada iteracion en un archivo .csv
+    void guardarSorteo() const {
+        ofstream archivo("sorteo_grupos.csv");
+        archivo << "Grupo,Posicion,Pais,Confederacion,Ranking\n";
+        for (int i = 0; i < total_grupos; i++) {
+            Grupo* g = grupos[i];
+            for (int j = 0; j < g->tamanio(); j++) {
+                archivo << g->getLetra() << ","
+                        << (j + 1) << ","
+                        << g->getEquipo(j)->pais << ","
+                        << g->getEquipo(j)->confederacion << ","
+                        << g->getEquipo(j)->ranking << "\n";
+            }
+        }
+        archivo.close();
+        cout << "Sorteo guardado en sorteo_grupos.csv\n";
     }
 
     void imprimirGrupos() const {
