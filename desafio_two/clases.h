@@ -40,6 +40,8 @@ public:
     public:
         string pais;
         string dt;
+        //Mate agrego este string para poder hacer el sorteo
+        string confederacion;
         int ranking;
         int goles_favor;
 

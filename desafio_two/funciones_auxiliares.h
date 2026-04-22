@@ -25,7 +25,6 @@ string extraer_palabra(string& linea) {
 
     return palabra;
 }
-
 void cargar_datos(equipo* torneo[], int& cantidad_equipos) {
     string linea;
     string campo_temp;
@@ -49,6 +48,8 @@ void cargar_datos(equipo* torneo[], int& cantidad_equipos) {
 
         campo_temp = extraer_palabra(linea);
         if(!campo_temp.empty()) nuevo_equipo->goles_favor = stoi(campo_temp);
+        //Nuevo campo para la confederación.
+        nuevo_equipo->confederacion = extraer_palabra(linea);
 
         torneo[cantidad_equipos] = nuevo_equipo;
         cantidad_equipos++;
@@ -96,6 +97,34 @@ void cargar_datos(equipo* torneo[], int& cantidad_equipos) {
     }
 }
 
+// Funcion para cargar datos de los bombos dados en el .csv
+
+void cargar_confederaciones(equipo* torneo[], int cantidad_equipos) {
+    string linea;
+    string campo_temp;
+
+    ifstream archivo_bombos("bombos.csv");
+
+    while (getline(archivo_bombos, linea)) {
+        if (linea.empty()) continue;
+        if (!linea.empty() && (unsigned char)linea[0] == 0xEF)
+            linea.erase(0, 3);
+        campo_temp= extraer_palabra(linea);
+        string nombre = extraer_palabra(linea);
+        string confederacion= extraer_palabra(linea);
+
+        if (!confederacion.empty() && confederacion.back() == '\r')
+            confederacion.pop_back();
+
+        for (int i = 0; i < cantidad_equipos; i++) {
+            if (torneo[i]->pais == nombre) {
+                torneo[i]->confederacion = confederacion;
+                break;
+            }
+        }
+    }
+    archivo_bombos.close();
+}
 
 void guardar_datos(equipo* torneo[], int cantidad_equipos) {
 
@@ -126,4 +155,5 @@ void guardar_datos(equipo* torneo[], int cantidad_equipos) {
 
     archivo_salida.close();
 }
+
 #endif // FUNCIONES_AUXILIARES_H
