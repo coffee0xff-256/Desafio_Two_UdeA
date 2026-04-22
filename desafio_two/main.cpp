@@ -17,7 +17,7 @@ int main() {
 
     //Mate acá hago lo que viene siendo lo que se imprime en pantalla del requisito II del documento
 
-    cout << "Sorteo del mundial UdeAWorlcup" << endl;
+    cout << "\nSorteo del mundial UdeAWorlcup\n" << endl;
     Sorteo sorteo;
     sorteo.conformarbombos(torneo, cantidad_equipos);
     sorteo.imprimirbombos();

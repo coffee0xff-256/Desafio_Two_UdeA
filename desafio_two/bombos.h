@@ -177,7 +177,7 @@ public:
     }
 
     void imprimir() const {
-        cout << "\nGRUPO " << letra << ":\n";
+        cout << "\nGRUPO\n " << letra << ":\n";
         for (int i = 0; i < equipos.tamano(); i++) {
             cout << "  " << (i + 1) << ". ["
                  << equipos[i]->ranking << "] "
@@ -286,8 +286,9 @@ public:
     }
 
     void realizarSorteo() {
-        srand(static_cast<unsigned>(time(nullptr)));
         int intentos = 0;
+        srand(static_cast<unsigned>(time(nullptr))
+              ^static_cast<unsigned>(reinterpret_cast<uintptr_t>(&intentos)));
         while (!intentarSorteo()) {
             if (++intentos > 10000) {
                 cout << "ERROR: no se encontro solucion";
@@ -295,21 +296,21 @@ public:
             }
         }
         if (intentos == 0)
-            cout << "Sorteo completado en la primera iteracion";
+            cout << "\nSorteo completado en la primera iteracion\n";
         else
-            cout << "Sorteo completado (" << intentos << " reintentos\n";
+            cout << "\nSorteo completado (" << intentos << " reintentos) \n";
 
         guardarSorteo();
     }
 
     void imprimirbombos() const {
-        cout <<"Sorteo de los bombos";
+        cout <<"\nSorteo de los bombos\n";
         for (int i = 0; i < total_bombos; i++)
             bombos[i]->imprimir();
     }
     //Funcón para guardar los bombos en cada iteracion en un archivo .csv
     void guardarSorteo() const {
-        ofstream archivo("sorteo_grupos.csv");
+        ofstream archivo("sorteo_grupos.csv", ios :: out | ios:: trunc);
         archivo << "Grupo,Posicion,Pais,Confederacion,Ranking\n";
         for (int i = 0; i < total_grupos; i++) {
             Grupo* g = grupos[i];
@@ -322,7 +323,7 @@ public:
             }
         }
         archivo.close();
-        cout << "Sorteo guardado en sorteo_grupos.csv\n";
+        cout << "\nSorteo guardado en sorteo_grupos.csv\n";
     }
 
     void imprimirGrupos() const {
