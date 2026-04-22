@@ -7,5 +7,6 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
+    bombos.h \
     clases.h \
     funciones_auxiliares.h
