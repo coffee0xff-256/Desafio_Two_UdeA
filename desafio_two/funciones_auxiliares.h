@@ -41,6 +41,12 @@ void cargar_datos(equipo* torneo[], int& cantidad_equipos) {
 
 
         nuevo_equipo->pais = extraer_palabra(linea);
+
+        if (nuevo_equipo->pais.empty() || nuevo_equipo->pais == "\r") {
+            delete nuevo_equipo;
+            continue;
+        }
+
         nuevo_equipo->dt = extraer_palabra(linea);
 
         campo_temp = extraer_palabra(linea);
