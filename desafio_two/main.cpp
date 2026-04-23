@@ -48,7 +48,7 @@ int main() {
     // y los recorro para mostrarlos.
     fase.construir_clasificacion();
     fase.imprimir_tablas();
-    cout << "\nClasificados a R16 (" << fase.getTotalClasificados() << " equipos) ===\n";
+    cout << "\nClasificados a R16 (" << fase.getTotalClasificados() << " equipos)\n";
     equipo** cls = fase.getClasificados();
     for (int i = 0; i < fase.getTotalClasificados(); i++)
         cout << (i + 1) << ". " << cls[i]->pais

@@ -4,7 +4,6 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <cstdint>
 #include "clases.h"
 #include <fstream>
 

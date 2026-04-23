@@ -244,14 +244,14 @@ public:
     // Imprime todos los partidos de grupos con sus resultados
     void imprimir_partidos(const string sedes[], int total_sedes,
                            const string arbitros[], int total_arbitros) const {
-        cout << "\n===== RESULTADOS FASE DE GRUPOS =====\n";
+        cout << "\n RESULTADOS FASE DE GRUPOS\n";
         for (int i = 0; i < total_partidos; i++)
             partidos[i].imprimir(sedes, total_sedes, arbitros, total_arbitros);
     }
 
     // Imprime todas las tablas de clasificación
     void imprimir_tablas() const {
-        cout << "\n===== TABLAS DE CLASIFICACION =====\n";
+        cout << "\nTABLAS DE CLASIFICACION\n";
         for (int g = 0; g < max_grupos; g++)
             tablas[g].imprimir();
     }
