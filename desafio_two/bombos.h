@@ -6,6 +6,7 @@
 #include <ctime>
 #include "clases.h"
 #include <fstream>
+
 //Mate acá hago el nodo de la lista enlazada como en el code anterior
 template<typename T>
 class Nodo {

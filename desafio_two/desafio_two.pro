@@ -9,4 +9,5 @@ SOURCES += \
 HEADERS += \
     bombos.h \
     clases.h \
+    fase_grupos.h \
     funciones_auxiliares.h
