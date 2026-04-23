@@ -131,7 +131,6 @@ void cargar_confederaciones(equipo* torneo[], int cantidad_equipos) {
     }
     archivo_bombos.close();
 }
-
 void guardar_datos(equipo* torneo[], int cantidad_equipos) {
 
     ofstream archivo_salida("jugadores.csv");
