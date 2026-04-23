@@ -7,12 +7,11 @@
 
 using namespace std;
 
-// Mate, esta función la dejé afuera para que cualquier parte del código
-// pueda sortear tres números distintos sin repetir, así no se nos cruzan los árbitros.
+// Mate esta estructura es para enlazar al jugador con los goles que metió en este partido.
 struct convocados{
-    jugador* jugador;
+    jugador* pjugador;
     int goles;
-    convocados(): jugador(nullptr), goles(0){}
+    convocados(): pjugador(nullptr), goles(0){}
 };
 
 class partido {
@@ -23,8 +22,7 @@ public:
     int sede_partido;
     int arb1, arb2, arb3;
 
-    // Mate, uso punteros a los equipos para que el partido sepa a quiénes apunta
-    // sin tener que crear copias de los países cada vez.
+    // Punteros a los equipos.
     equipo* e1;
     equipo* e2;
 
@@ -34,16 +32,17 @@ public:
     convocados convocados_e1[11];
     convocados convocados_e2[11];
 
+    // Arrancamos todo en -1 o nulo para saber si ya se configuró o no.
     partido() :
         dia(-1), grupo('?'),
-        sede_patido(-1), arb1(-1), arb2(-1), arb3(-1),
+        sede_partido(-1), arb1(-1), arb2(-1), arb3(-1),
         e1(nullptr), e2(nullptr),
         goles_e1(-1), goles_e2(-1) {}
 
     bool jugado() const{return goles_e1 >= 0;}
 
-    // Aquí solo guardamos los índices. Mate, cuando cargues el CSV,
-    // estos números te dirán qué nombre mostrar de tu lista de sedes y árbitros.
+    // Mate esto coge un número random para la sede y tres para los árbitros.
+    // Los do-while son para garantizar que los 3 árbitros sean diferentes y no se crucen.
     void asignar_recursos(int total_sedes, int total_arbitros) {
         if (total_sedes > 0)
             sede_partido = rand() % total_sedes;
@@ -54,14 +53,15 @@ public:
         }
     }
 
+    // Calcula cuántos goles mete un equipo dependiendo de su ranking. A mejor ranking
     static int goles_por_ranking(int ranking){
         int max_goles = 4 - (ranking*3)/60;
         if (max_goles < 1) max_goles = 1;
         if (max_goles > 4) max_goles = 4;
         return rand() % (max_goles + 1);
-
     }
 
+    // Saca 11 jugadores al azar de la plantilla completa para que sean los titulares.
     static void elegir_once(equipo* eq, int indices[11]) {
         int n = eq->contador_jugadores < 26 ? eq->contador_jugadores : 26;
         int disponibles[26];
@@ -77,11 +77,15 @@ public:
         for (int i = n; i < 11; i++) indices[i] = 0;
     }
 
+    // Le tira los goles al azar a los 11 que están jugando.
     static void repartir_goles_conv(convocados conv[11], int total_goles) {
         for (int g = 0; g < total_goles; g++)
             conv[rand() % 11].goles++;
     }
 
+    // Mate esto hace lo del jugar el partido.
+    // Asigna rbitros/sedes, simula goles y si es eliminatoria desempata a favor del mejor ranking.
+    // Al final elige titulares y les suma los goles.
     void simular(bool eliminatoria, int total_sedes, int total_arbitros) {
         asignar_recursos(total_sedes, total_arbitros);
 
@@ -97,16 +101,15 @@ public:
         int idx1[11], idx2[11];
         elegir_once(e1, idx1);
         elegir_once(e2, idx2);
-        for (int i = 0; i < 11; i++) convocados_e1[i].jugador= e1->plantilla[idx1[i]];
-        for (int i = 0; i < 11; i++) convocados_e2[i].jugador = e2->plantilla[idx2[i]];
+        for (int i = 0; i < 11; i++) convocados_e1[i].pjugador= e1->plantilla[idx1[i]];
+        for (int i = 0; i < 11; i++) convocados_e2[i].pjugador = e2->plantilla[idx2[i]];
 
         repartir_goles_conv(convocados_e1, goles_e1);
         repartir_goles_conv(convocados_e2, goles_e2);
     }
 
-
-    // Mate, en el imprimir ahora solo muestro los IDs de árbitros y sedes.
-    // Para que salgan los nombres reales, habría que pasarle los arreglos del CSV.
+    // Aca imprimimos usando los IDs. Le pasamos los arreglos con los nombres
+    // pa que no tire numeros raros sino el texto que cargamos del CSV.
     void imprimir(const string sedes[], int total_sedes,
                   const string arbitros[], int total_arbitros) const {
 
@@ -133,16 +136,15 @@ public:
 
         if (arb1 >= 0 && arb1 < total_arbitros)
             cout << "  Arbitros: " << arbitros[arb1]
-                 << ", "           << arbitros[arb2]
-                 << ", "           << arbitros[arb3] << "\n";
+                 << ", "            << arbitros[arb2]
+                 << ", "            << arbitros[arb3] << "\n";
 
         if (jugado()) {
-            // Goleadores equipo 1
             cout << "  Goleadores " << e1->pais << ": ";
             bool alguno = false;
             for (int i = 0; i < 11; i++) {
-                if (convocados_e1[i].goles > 0 && convocados_e1[i].jugador) {
-                    cout << "#" << convocados_e1[i].jugador->dorsal
+                if (convocados_e1[i].goles > 0 && convocados_e1[i].pjugador) {
+                    cout << "#" << convocados_e1[i].pjugador->dorsal
                          << "(" << convocados_e1[i].goles << ") ";
                     alguno = true;
                 }
@@ -150,12 +152,11 @@ public:
             if (!alguno) cout << "-";
             cout << "\n";
 
-            // Goleadores equipo 2
             cout << "  Goleadores " << e2->pais << ": ";
             alguno = false;
             for (int i = 0; i < 11; i++) {
-                if (convocados_e2[i].goles > 0 && convocados_e2[i].jugador) {
-                    cout << "#" << convocados_e2[i].jugador->dorsal
+                if (convocados_e2[i].goles > 0 && convocados_e2[i].pjugador) {
+                    cout << "#" << convocados_e2[i].pjugador->dorsal
                          << "(" << convocados_e2[i].goles << ") ";
                     alguno = true;
                 }

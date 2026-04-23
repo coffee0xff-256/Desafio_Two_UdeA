@@ -139,7 +139,6 @@ void guardar_datos(equipo* torneo[], int cantidad_equipos) {
     //ema aqui lo que hice fue reescribir casi el mismo csv casi hahaha
     archivo_salida << "Equipo,nombre,apellido,dorsal,PJ,goles,minutos j,asistencias,T.Amarillas,T.rojas,Faltas\n";
 
-
     for (int i = 0; i < cantidad_equipos; i++) {
         for (int j = 0; j < torneo[i]->contador_jugadores; j++) {
             jugador* p = torneo[i]->plantilla[j];
@@ -159,6 +158,33 @@ void guardar_datos(equipo* torneo[], int cantidad_equipos) {
     }
 
     archivo_salida.close();
+}
+
+int cargar_arbitros(string arbitros[], int max_arbitros) {
+    ifstream archivo("arbitros.csv");
+    string linea;
+    getline(archivo, linea); // saltar encabezado
+    int n = 0;
+    while (getline(archivo, linea) && n < max_arbitros) {
+        if (linea.empty()) continue;
+        if (!linea.empty() && linea.back() == '\r') linea.pop_back();
+        arbitros[n++] = linea;
+    }
+    archivo.close();
+    return n;
+}
+int cargar_sedes(string sedes[], int max_sedes) {
+    ifstream archivo("sedes.csv");
+    string linea;
+    getline(archivo, linea); // saltar encabezado
+    int n = 0;
+    while (getline(archivo, linea) && n < max_sedes) {
+        if (linea.empty()) continue;
+        if (!linea.empty() && linea.back() == '\r') linea.pop_back();
+        sedes[n++] = linea;
+    }
+    archivo.close();
+    return n;
 }
 
 #endif // FUNCIONES_AUXILIARES_H
