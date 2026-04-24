@@ -11,4 +11,6 @@ HEADERS += \
     bombos.h \
     clases.h \
     fase_grupos.h \
-    funciones_auxiliares.h
+    funciones_auxiliares.h \
+    math.h \
+    simulacion.h

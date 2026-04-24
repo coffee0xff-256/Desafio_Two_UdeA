@@ -9,15 +9,20 @@
 
 using namespace std;
 
-// Mate, aquí guardo los datos de cada equipo para tener los puntos y goles a mano
-struct filadeclasificacion {
+//Definicion de la fila de tabla de clasificacion de los equipos dentro de su grupo
+
+//Emma Aquí cambio de struct a class por requisitos del desafio
+class filadeclasificacion {
+public:
     equipo* eq;
     int pj, pg, pe, pp;
     int gf, gc;
     int puntos;
     char grupos;
 
-    filadeclasificacion() : eq(nullptr), pj(0), pg(0), pe(0), pp(0), gf(0), gc(0), puntos(0), grupos('?') {}
+    filadeclasificacion() : eq(nullptr),
+        pj(0), pg(0), pe(0), pp(0), gf(0), gc(0), puntos(0) {}
+
     int diferencia() const { return gf - gc; }
 };
 

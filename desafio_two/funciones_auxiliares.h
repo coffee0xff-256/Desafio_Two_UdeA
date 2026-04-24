@@ -160,31 +160,55 @@ void guardar_datos(equipo* torneo[], int cantidad_equipos) {
     archivo_salida.close();
 }
 
-int cargar_arbitros(string arbitros[], int max_arbitros) {
+//ema aqui pondre la carga de arbitros para poder leer ese csv
+
+void cargar_arbitros(string lista_arbitros[], int& cantidad_arbitros) {
     ifstream archivo("arbitros.csv");
     string linea;
-    getline(archivo, linea); // saltar encabezado
-    int n = 0;
-    while (getline(archivo, linea) && n < max_arbitros) {
-        if (linea.empty()) continue;
-        if (!linea.empty() && linea.back() == '\r') linea.pop_back();
-        arbitros[n++] = linea;
+
+    getline(archivo, linea);
+
+    cantidad_arbitros = 0;
+    while (getline(archivo, linea)) {
+        if (!linea.empty()) {
+            lista_arbitros[cantidad_arbitros] = linea;
+            cantidad_arbitros++;
+        }
     }
     archivo.close();
-    return n;
 }
-int cargar_sedes(string sedes[], int max_sedes) {
-    ifstream archivo("sedes.csv");
-    string linea;
-    getline(archivo, linea); // saltar encabezado
-    int n = 0;
-    while (getline(archivo, linea) && n < max_sedes) {
-        if (linea.empty()) continue;
-        if (!linea.empty() && linea.back() == '\r') linea.pop_back();
-        sedes[n++] = linea;
+//aqui ema pongo una nueva función para actualizar los datos del equipo
+void actualizar_equipos_csv(equipo* torneo[], int cantidad_equipos) {
+    // Abrimos el archivo en modo trunc para sobrescribir los datos viejos con los nuevos
+    ofstream archivo_salida("equipos.csv", ios::out | ios::trunc);
+
+    if (!archivo_salida.is_open()) {
+        cout << "Error: No se pudo abrir equipos.csv para actualizar." << endl;
+        return;
     }
-    archivo.close();
-    return n;
+
+    // Escribimos el encabezado tal cual lo tienes
+    archivo_salida << "pais,dt,ranking,ga,gc,pg,pe,pp,t.a,t.r,faltas\n";
+
+    for (int i = 0; i < cantidad_equipos; i++) {
+        equipo* e = torneo[i];
+        archivo_salida << e->pais << ","
+                       << e->dt << ","
+                       << e->ranking << ","
+                       << e->ga << ","
+                       << e->gc << ","
+                       << e->pg << ","
+                       << e->pe << ","
+                       << e->pp << ","
+                       << e->t_a << ","
+                       << e->t_r << ","
+                       << e->faltas << "\n";
+    }
+
+    archivo_salida.close();
+    cout << "Archivo equipos.csv actualizado correctamente." << endl;
 }
+
+
 
 #endif // FUNCIONES_AUXILIARES_H
