@@ -1,5 +1,11 @@
 #ifndef SIMULACION_H
 #define SIMULACION_H
+
+
+//librerias externa unicamente para que en terminal se vea mejor que es para ponerle un delay como en arduino
+
+#include <thread>
+#include <chrono>
 using namespace std;
 
 class Partido {
@@ -67,6 +73,10 @@ public:
                 eq->ga += 1;
                 goles_hoy++;
                 cout << "  -> Gol de: " << j->nombre << " " << j->apellido << " (#" << j->dorsal << ")\n";
+
+                this_thread::sleep_for(chrono::seconds(1/2));
+
+
             }
         }
         return goles_hoy;
@@ -80,7 +90,6 @@ public:
         calcularPosesion();
         cout << "Posesion: " << local->pais << " " << posesion_local << "% - "
              << visitante->pais << " " << posesion_visitante << "%" << endl;
-
         int meta_local = calcularGolesEsperados(local, visitante);
         int meta_visitante = calcularGolesEsperados(visitante, local);
 
@@ -103,6 +112,7 @@ public:
 
         cout << "RESULTADO FINAL: " << local->pais << " " << goles_L_hoy << " - "
              << goles_V_hoy << " " << visitante->pais << "\n==============================\n";
+        this_thread::sleep_for(chrono::seconds(2));
     }
 
     equipo* ganador = nullptr;
@@ -124,7 +134,6 @@ public:
 
         cout << "\nAnotaciones de " << visitante->pais << ":" << endl;
         int goles_V_hoy = simularJugadores(visitante, meta_visitante);
-
         // emma sumo estadisticas de goles
         local->gc += goles_V_hoy;
         visitante->gc += goles_L_hoy;
@@ -157,11 +166,11 @@ public:
                 ganador = visitante;
                 cout << "-> " << visitante->pais << " avanza en penales!" << endl;
             }
-        }
+       this_thread::sleep_for(chrono::seconds(2)); }
 
         cout << "RESULTADO FINAL: " << local->pais << " " << goles_L_hoy << " - "
              << goles_V_hoy << " " << visitante->pais << "\n==============================\n";
-    }
+   this_thread::sleep_for(chrono::seconds(2)); }
 
 
 };

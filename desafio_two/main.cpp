@@ -32,6 +32,7 @@ int main() {
     cargar_confederaciones(torneo, cantidad_equipos);
     cargar_arbitros(arbitros, cantidad_arbitros);
 
+
     cout << "Datos cargados correctamente.\n" << endl;
 
     cout << "=== SORTEO DEL MUNDIAL UdeA WorldCup ===" << endl;
@@ -39,6 +40,8 @@ int main() {
     sorteo.conformarbombos(torneo, cantidad_equipos);
     sorteo.realizarSorteo();
     sorteo.imprimirGrupos();
+
+    this_thread::sleep_for(chrono::seconds(2)); // delay de 5segundos emma
 
     cout << "\n==================================================" << endl;
     cout << "       INICIANDO FASE DE GRUPOS (18 DIAS)         " << endl;
@@ -48,6 +51,8 @@ int main() {
 
     //  las 3 jornadas de la fase de grupos
     for(int jornada = 0; jornada < 3; jornada++) {
+
+        this_thread::sleep_for(chrono::seconds(2));
 
         // ema iteramos sobre los 12 grupos, avanzando de 2 en 2 (A-B, C-D, E-F...)
         for(int g = 0; g < 12; g += 2) {
@@ -86,9 +91,11 @@ int main() {
                 string a2 = arbitros[rand() % cantidad_arbitros];
                 string a3 = arbitros[rand() % cantidad_arbitros];
 
+
                 Partido p1(local1, vis1, "Dia " + to_string(dia_actual), a1, a2, a3);
                 cout << "--- Grupo " << grupo_actual->getLetra() << " ---" << endl;
                 p1.simular();
+
 
                 // --- PARTIDO 2 DEL GRUPO ---
                 string b1 = arbitros[rand() % cantidad_arbitros];
@@ -97,10 +104,12 @@ int main() {
 
                 Partido p2(local2, vis2, "Dia " + to_string(dia_actual), b1, b2, b3);
                 p2.simular();
+
+
             }
             // avanzamos al siguiente dia una vez que juegan los 2 grupos
             dia_actual++;
-        }
+        this_thread::sleep_for(chrono::seconds(2));}
     }
 
 

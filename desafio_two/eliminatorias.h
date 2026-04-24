@@ -6,6 +6,11 @@
 #include <bombos.h>
 #include <simulacion.h>
 
+//librerias externa unicamente para que en terminal se vea mejor que es para ponerle un delay como en arduino
+
+#include <thread>
+#include <chrono>
+
 using namespace std;
 
 // aqui van las clasificaciones emma
@@ -84,6 +89,10 @@ void simular_ronda(equipo* equipos_in[], int num_equipos, equipo* equipos_out[],
         p.simular_eliminatoria();
 
         equipos_out[indice_out++] = p.ganador;
+
+        this_thread::sleep_for(chrono::seconds(2));
+
+
     }
 }
 
@@ -102,25 +111,35 @@ void jugar_fases_finales(equipo* clasificados_r16[32], string arbitros[], int ca
     cout << "=======================================" << endl;
     simular_ronda(clasificados_r16, 32, octavos, "dieciseisavos", arbitros, cantidad_arbitros);
 
+    this_thread::sleep_for(chrono::seconds(2));
+
     cout << "\n=======================================" << endl;
     cout << "             OCTAVOS DE FINAL          " << endl;
     cout << "=======================================" << endl;
     simular_ronda(octavos, 16, cuartos, "octavos", arbitros, cantidad_arbitros);
+
+    this_thread::sleep_for(chrono::seconds(2));
 
     cout << "\n=======================================" << endl;
     cout << "             CUARTOS DE FINAL          " << endl;
     cout << "=======================================" << endl;
     simular_ronda(cuartos, 8, semis, "cuartos", arbitros, cantidad_arbitros);
 
+    this_thread::sleep_for(chrono::seconds(2));
+
     cout << "\n=======================================" << endl;
     cout << "               SEMIFINALES             " << endl;
     cout << "=======================================" << endl;
     simular_ronda(semis, 4, finalistas, "semifinal", arbitros, cantidad_arbitros);
 
+    this_thread::sleep_for(chrono::seconds(2));
+
     cout << "\n=======================================" << endl;
     cout << "               GRAN FINAL              " << endl;
     cout << "=======================================" << endl;
     simular_ronda(finalistas, 2, campeon, "gran Final", arbitros, cantidad_arbitros);
+
+    this_thread::sleep_for(chrono::seconds(2));
 
     cout << "\n**************************************************" << endl;
     cout << "  EL CAMPEON DEL MUNDIAL UdeAWorldCup ES : " << campeon[0]->pais << " !!!" << endl;
