@@ -78,14 +78,14 @@ void clasificar_r16(Sorteo& sorteo, equipo* clasificados_r16[32]) {
 //aqui emma aplico el polimorfismo que te hable de las eliminatorias
 
 
-void simular_ronda(equipo* equipos_in[], int num_equipos, equipo* equipos_out[], string nombre_fase, string arbitros[], int cantidad_arbitros) {
+void simular_ronda(equipo* equipos_in[], int num_equipos, equipo* equipos_out[], string nombre_fase, string arbitros[], int cantidad_arbitros, string sedes[],int cantidad_sedes) {
     int indice_out = 0;
     for (int i = 0; i < num_equipos; i += 2) {
         string a1 = arbitros[rand() % cantidad_arbitros];
         string a2 = arbitros[rand() % cantidad_arbitros];
         string a3 = arbitros[rand() % cantidad_arbitros];
-
-        Partido p(equipos_in[i], equipos_in[i+1], nombre_fase, a1, a2, a3);
+        string s = sedes[rand() % cantidad_sedes];
+        Partido p(equipos_in[i], equipos_in[i+1], nombre_fase, a1, a2, a3,s);
         p.simular_eliminatoria();
 
         equipos_out[indice_out++] = p.ganador;
@@ -99,7 +99,7 @@ void simular_ronda(equipo* equipos_in[], int num_equipos, equipo* equipos_out[],
 
 //pongo esto aqui khanboy para no ensuciar mucho el main
 
-void jugar_fases_finales(equipo* clasificados_r16[32], string arbitros[], int cantidad_arbitros) {
+void jugar_fases_finales(equipo* clasificados_r16[32], string arbitros[], int cantidad_arbitros, string sedes[],int cantidad_sedes) {
     equipo* octavos[16];
     equipo* cuartos[8];
     equipo* semis[4];
@@ -109,35 +109,35 @@ void jugar_fases_finales(equipo* clasificados_r16[32], string arbitros[], int ca
     cout << "\n=======================================" << endl;
     cout << "           DIECISEISAVOS DE FINAL      " << endl;
     cout << "=======================================" << endl;
-    simular_ronda(clasificados_r16, 32, octavos, "dieciseisavos", arbitros, cantidad_arbitros);
+    simular_ronda(clasificados_r16, 32, octavos, "dieciseisavos", arbitros, cantidad_arbitros,sedes,cantidad_sedes);
 
     this_thread::sleep_for(chrono::seconds(2));
 
     cout << "\n=======================================" << endl;
     cout << "             OCTAVOS DE FINAL          " << endl;
     cout << "=======================================" << endl;
-    simular_ronda(octavos, 16, cuartos, "octavos", arbitros, cantidad_arbitros);
+    simular_ronda(octavos, 16, cuartos, "octavos", arbitros, cantidad_arbitros,sedes,cantidad_sedes);
 
     this_thread::sleep_for(chrono::seconds(2));
 
     cout << "\n=======================================" << endl;
     cout << "             CUARTOS DE FINAL          " << endl;
     cout << "=======================================" << endl;
-    simular_ronda(cuartos, 8, semis, "cuartos", arbitros, cantidad_arbitros);
+    simular_ronda(cuartos, 8, semis, "cuartos", arbitros, cantidad_arbitros,sedes,cantidad_sedes);
 
     this_thread::sleep_for(chrono::seconds(2));
 
     cout << "\n=======================================" << endl;
     cout << "               SEMIFINALES             " << endl;
     cout << "=======================================" << endl;
-    simular_ronda(semis, 4, finalistas, "semifinal", arbitros, cantidad_arbitros);
+    simular_ronda(semis, 4, finalistas, "semifinal", arbitros, cantidad_arbitros,sedes,cantidad_sedes);
 
     this_thread::sleep_for(chrono::seconds(2));
 
     cout << "\n=======================================" << endl;
     cout << "               GRAN FINAL              " << endl;
     cout << "=======================================" << endl;
-    simular_ronda(finalistas, 2, campeon, "gran Final", arbitros, cantidad_arbitros);
+    simular_ronda(finalistas, 2, campeon, "gran Final", arbitros, cantidad_arbitros,sedes,cantidad_sedes);
 
     this_thread::sleep_for(chrono::seconds(2));
 

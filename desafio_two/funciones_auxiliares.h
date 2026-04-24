@@ -212,6 +212,23 @@ void cargar_arbitros(string lista_arbitros[], int& cantidad_arbitros) {
     }
     archivo.close();
 }
+//aqui ema trabajo leyendo las sedes
+
+void cargar_sedes(string sedes[], int& cantidad_sedes) {
+    ifstream archivo_sedes("sedes.csv");
+    string linea;
+
+
+    getline(archivo_sedes, linea);
+
+    while (getline(archivo_sedes, linea)) {
+        if (linea.empty()) continue;
+        sedes[cantidad_sedes] = linea;
+        cantidad_sedes++;
+    }
+    archivo_sedes.close();
+}
+
 
 //aqui ema pongo una nueva función para actualizar los datos del equipo
 
@@ -247,5 +264,7 @@ void actualizar_equipos_csv(equipo* torneo[], int cantidad_equipos) {
     archivo_salida.close();
     cout << "Archivo equipos.csv actualizado correctamente." << endl;
 }
+
+
 
 #endif // FUNCIONES_AUXILIARES_H

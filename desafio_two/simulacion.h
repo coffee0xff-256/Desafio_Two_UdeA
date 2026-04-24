@@ -8,20 +8,24 @@
 #include <chrono>
 using namespace std;
 
+
 class Partido {
 public:
     equipo* local;
     equipo* visitante;
     string fecha;
     string hora = "00:00";
-    string sede = "nombreSede";
     string arb1, arb2, arb3;
+    string sede = "";
+
+
+
 
     double posesion_local = 0;
     double posesion_visitante = 0;
 
-    Partido(equipo* l, equipo* v, string f, string a1, string a2, string a3)
-        : local(l), visitante(v), fecha(f), arb1(a1), arb2(a2), arb3(a3) {}
+    Partido(equipo* l, equipo* v, string f, string a1, string a2, string a3, string s)
+        : local(l), visitante(v), fecha(f), arb1(a1), arb2(a2), arb3(a3) , sede(s){}
 
     void calcularPosesion() {
         double rankL = local->ranking == 0 ? 1 : local->ranking;

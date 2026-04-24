@@ -18,6 +18,9 @@ using namespace std;
 
 int main() {
 
+
+
+
     srand(time(0));
 
     equipo* torneo[48];
@@ -26,6 +29,10 @@ int main() {
 
     string arbitros[150];
     int cantidad_arbitros = 0;
+
+    string sedes[20];
+    int cantidad_sedes = 0;
+    cargar_sedes(sedes, cantidad_sedes);
 
     cout << "=== CARGA DE DATOS ===" << endl;
     cargar_datos(torneo, cantidad_equipos);
@@ -90,9 +97,10 @@ int main() {
                 string a1 = arbitros[rand() % cantidad_arbitros];
                 string a2 = arbitros[rand() % cantidad_arbitros];
                 string a3 = arbitros[rand() % cantidad_arbitros];
+                string s = sedes[rand() % cantidad_sedes];
 
 
-                Partido p1(local1, vis1, "Dia " + to_string(dia_actual), a1, a2, a3);
+                Partido p1(local1, vis1, "Dia " + to_string(dia_actual), a1, a2, a3,s);
                 cout << "--- Grupo " << grupo_actual->getLetra() << " ---" << endl;
                 p1.simular();
 
@@ -101,8 +109,9 @@ int main() {
                 string b1 = arbitros[rand() % cantidad_arbitros];
                 string b2 = arbitros[rand() % cantidad_arbitros];
                 string b3 = arbitros[rand() % cantidad_arbitros];
+                 s = sedes[rand() % cantidad_sedes];
 
-                Partido p2(local2, vis2, "Dia " + to_string(dia_actual), b1, b2, b3);
+                Partido p2(local2, vis2, "Dia " + to_string(dia_actual), b1, b2, b3,s);
                 p2.simular();
 
 
@@ -118,7 +127,7 @@ int main() {
 
 
 
-    jugar_fases_finales(clasificados_r16, arbitros, cantidad_arbitros);
+    jugar_fases_finales(clasificados_r16, arbitros, cantidad_arbitros,sedes,cantidad_sedes);
 
     cout << "\n=== GUARDANDO RESULTADOS EN ARCHIVOS CSV ===" << endl;
 
