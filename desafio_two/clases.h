@@ -72,7 +72,6 @@ public:
         equipo(){
             ranking = 0;
             goles_favor=0;
-            goles_contra=0;
             contador_jugadores=0;
             pais="";
             dt = "";
