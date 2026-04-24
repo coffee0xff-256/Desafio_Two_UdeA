@@ -1,64 +1,117 @@
 #include <iostream>
-#include <clases.h>
-#include <funciones_auxiliares.h>
-#include <bombos.h>
-#include <fase_grupos.h>
+#include <ctime>
+#include <cstdlib>
+#include "clases.h"
+#include "funciones_auxiliares.h"
+#include "bombos.h"
+#include "math.h"
+#include "simulacion.h"
+
 using namespace std;
 
 int main() {
 
     srand(time(0));
+
     equipo* torneo[48];
     int cantidad_equipos = 0;
 
-    cout << "carga de datos"<<endl;
+
+    string arbitros[150];
+    int cantidad_arbitros = 0;
+
+    cout << "=== CARGA DE DATOS ===" << endl;
     cargar_datos(torneo, cantidad_equipos);
     cargar_confederaciones(torneo, cantidad_equipos);
+    cargar_arbitros(arbitros, cantidad_arbitros);
 
-    cout<< "guardando en los csv"<<endl;
-    guardar_datos(torneo,cantidad_equipos);
+    cout << "Datos cargados correctamente.\n" << endl;
 
-    // Mate pille aca cargue las sedes y los arbitros directo del CSV.
-    // Puse unos topes fijos pa no enredarnos y al final tira cuantos cargo pa confirmar.
-    static const int MAX_SEDES    = 20;
-    static const int MAX_ARBITROS = 64;
-    string sedes[MAX_SEDES];
-    string arbitros[MAX_ARBITROS];
-    int total_sedes    = cargar_sedes(sedes, MAX_SEDES);
-    int total_arbitros = cargar_arbitros(arbitros, MAX_ARBITROS);
-    cout << "Sedes cargadas: "    << total_sedes    << endl;
-    cout << "Arbitros cargados: " << total_arbitros << endl;
-
-    // Aca aramamos los bombos, hacemos el sorteo y los grupos.
-    cout << "Sorteo del mundial UdeAWorldCup" << endl;
+    cout << "=== SORTEO DEL MUNDIAL UdeA WorldCup ===" << endl;
     Sorteo sorteo;
     sorteo.conformarbombos(torneo, cantidad_equipos);
-    sorteo.imprimirbombos();
     sorteo.realizarSorteo();
     sorteo.imprimirGrupos();
 
-    // Pille, en esta parte meto el calendario de la fase de grupos
-    // las sedes y los arbitros simulo todos los partidos
-    cout << "\nFase de Grupos" << endl;
-    fasegrupos fase;
-    fase.generar_calendario(sorteo);
-    fase.asignar_recursos(sedes, total_sedes, arbitros, total_arbitros);
-    fase.simular_fase_grupos(sedes, total_sedes, arbitros, total_arbitros);
-    fase.imprimir_partidos(sedes, total_sedes, arbitros, total_arbitros);
+    cout << "\n==================================================" << endl;
+    cout << "       INICIANDO FASE DE GRUPOS (18 DIAS)         " << endl;
+    cout << "==================================================" << endl;
 
-    // Acs cuadro la tabla general de clasificación, saco los que pasaron a dieciseisavos(R16)
-    // y los recorro para mostrarlos.
-    fase.construir_clasificacion();
-    fase.imprimir_tablas();
-    cout << "\nClasificados a R16 (" << fase.getTotalClasificados() << " equipos)\n";
-    equipo** cls = fase.getClasificados();
-    for (int i = 0; i < fase.getTotalClasificados(); i++)
-        cout << (i + 1) << ". " << cls[i]->pais
-             << " [" << cls[i]->confederacion << "]" << endl;
+    int dia_actual = 1;
 
-    //borramos los equipos de la memoria para no dejar basura.
-    for (int i = 0; i < cantidad_equipos; i++)
+    //  las 3 jornadas de la fase de grupos
+    for(int jornada = 0; jornada < 3; jornada++) {
+
+        // ema iteramos sobre los 12 grupos, avanzando de 2 en 2 (A-B, C-D, E-F...)
+        for(int g = 0; g < 12; g += 2) {
+            cout << "\n////////////////////////////////////////" << endl;
+            cout << "               DIA " << dia_actual << endl;
+            cout << "////////////////////////////////////////\n" << endl;
+
+            //  los 2 grupos programados para este dia
+            for(int offset = 0; offset < 2; offset++) {
+                Grupo* grupo_actual = sorteo.getGrupo(g + offset);
+
+                //  4 equipos del grupo
+                equipo* eq1 = grupo_actual->getEquipo(0);
+                equipo* eq2 = grupo_actual->getEquipo(1);
+                equipo* eq3 = grupo_actual->getEquipo(2);
+                equipo* eq4 = grupo_actual->getEquipo(3);
+
+                equipo* local1; equipo* vis1;
+                equipo* local2; equipo* vis2;
+
+                //  cruces dependiendo de la jornada
+                if (jornada == 0) { // Fecha 1
+                    local1 = eq1; vis1 = eq2;
+                    local2 = eq3; vis2 = eq4;
+                } else if (jornada == 1) { // Fecha 2
+                    local1 = eq1; vis1 = eq3;
+                    local2 = eq2; vis2 = eq4;
+                } else { // Fecha 3
+                    local1 = eq1; vis1 = eq4;
+                    local2 = eq2; vis2 = eq3;
+                }
+
+                // --- PARTIDO 1 DEL GRUPO ---
+                // ema  3 arbitros al azar de arbitros.csv
+                string a1 = arbitros[rand() % cantidad_arbitros];
+                string a2 = arbitros[rand() % cantidad_arbitros];
+                string a3 = arbitros[rand() % cantidad_arbitros];
+
+                Partido p1(local1, vis1, "Dia " + to_string(dia_actual), a1, a2, a3);
+                cout << "--- Grupo " << grupo_actual->getLetra() << " ---" << endl;
+                p1.simular();
+
+                // --- PARTIDO 2 DEL GRUPO ---
+                string b1 = arbitros[rand() % cantidad_arbitros];
+                string b2 = arbitros[rand() % cantidad_arbitros];
+                string b3 = arbitros[rand() % cantidad_arbitros];
+
+                Partido p2(local2, vis2, "Dia " + to_string(dia_actual), b1, b2, b3);
+                p2.simular();
+            }
+            // avanzamos al siguiente dia una vez que juegan los 2 grupos
+            dia_actual++;
+        }
+    }
+
+
+    cout << "\n=== GUARDANDO RESULTADOS EN ARCHIVOS CSV ===" << endl;
+
+    //estadisticas de los jugadores
+    guardar_datos(torneo, cantidad_equipos);
+
+    //  las estadisticas de los equipos
+    actualizar_equipos_csv(torneo, cantidad_equipos);
+
+    cout << "Simulacion terminada y datos persistidos." << endl;
+
+    // Liberar memoria
+    for(int i = 0; i < cantidad_equipos; i++) {
         delete torneo[i];
+    }
 
-    return 0;
-}
+    // emma de aqui empezare a trabajar con las otras pertes del torneo R
+
+    return 0;}
