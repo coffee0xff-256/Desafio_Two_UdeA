@@ -112,4 +112,6 @@ int main() {
         delete torneo[i];
     }
 
+    // emma de aqui empezare a trabajar con las otras pertes del torneo R
+
     return 0;}
