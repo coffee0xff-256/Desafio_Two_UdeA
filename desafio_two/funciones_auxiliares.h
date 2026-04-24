@@ -162,4 +162,22 @@ void guardar_datos(equipo* torneo[], int cantidad_equipos) {
     archivo_salida.close();
 }
 
+//ema aqui pondre la carga de arbitros para poder leer ese csv
+
+void cargar_arbitros(string lista_arbitros[], int& cantidad_arbitros) {
+    ifstream archivo("arbitros.csv");
+    string linea;
+
+    getline(archivo, linea);
+
+    cantidad_arbitros = 0;
+    while (getline(archivo, linea)) {
+        if (!linea.empty()) {
+            lista_arbitros[cantidad_arbitros] = linea;
+            cantidad_arbitros++;
+        }
+    }
+    archivo.close();
+}
+
 #endif // FUNCIONES_AUXILIARES_H
