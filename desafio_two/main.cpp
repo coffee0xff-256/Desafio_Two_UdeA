@@ -1,11 +1,18 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
-#include "clases.h"
-#include "funciones_auxiliares.h"
-#include "bombos.h"
-#include "math.h"
-#include "simulacion.h"
+#include <clases.h>
+#include <funciones_auxiliares.h>
+#include <bombos.h>
+#include <math.h>
+#include <simulacion.h>
+#include <eliminatorias.h>
+
+//librerias externa unicamente para que en terminal se vea mejor que es para ponerle un delay como en arduino
+
+#include <thread>
+#include <chrono>
+
 
 using namespace std;
 
@@ -97,21 +104,29 @@ int main() {
     }
 
 
+    equipo* clasificados_r16[32];
+    clasificar_r16(sorteo, clasificados_r16);
+
+
+
+    jugar_fases_finales(clasificados_r16, arbitros, cantidad_arbitros);
+
     cout << "\n=== GUARDANDO RESULTADOS EN ARCHIVOS CSV ===" << endl;
 
-    //estadisticas de los jugadores
     guardar_datos(torneo, cantidad_equipos);
 
-    //  las estadisticas de los equipos
     actualizar_equipos_csv(torneo, cantidad_equipos);
 
     cout << "Simulacion terminada y datos persistidos." << endl;
 
-    // Liberar memoria
+    // 4. Liberamos la memoria
     for(int i = 0; i < cantidad_equipos; i++) {
         delete torneo[i];
     }
 
-    // emma de aqui empezare a trabajar con las otras pertes del torneo R
-
     return 0;}
+
+
+
+
+

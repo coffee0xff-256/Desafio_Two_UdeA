@@ -214,9 +214,12 @@ void cargar_arbitros(string lista_arbitros[], int& cantidad_arbitros) {
 }
 
 //aqui ema pongo una nueva función para actualizar los datos del equipo
+
+
 void actualizar_equipos_csv(equipo* torneo[], int cantidad_equipos) {
-    // Abrimos el archivo en modo trunc para sobrescribir los datos viejos con los nuevos
-    ofstream archivo_salida("equipos.csv", ios::out | ios::trunc);
+
+
+    ofstream archivo_salida("equipos.csv");
 
     if (!archivo_salida.is_open()) {
         cout << "Error: No se pudo abrir equipos.csv para actualizar." << endl;

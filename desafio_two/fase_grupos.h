@@ -3,9 +3,9 @@
 
 #include <iostream>
 #include <cstdlib>
-#include "clases.h"
-#include "Partido.h"
-#include "bombos.h"
+#include <clases.h>
+#include <Partido.h>
+#include <bombos.h>
 
 using namespace std;
 

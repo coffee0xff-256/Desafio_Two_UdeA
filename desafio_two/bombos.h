@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include "clases.h"
+#include <clases.h>
 #include <fstream>
 
 //Mate acá hago el nodo de la lista enlazada como en el code anterior
