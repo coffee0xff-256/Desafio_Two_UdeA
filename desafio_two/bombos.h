@@ -288,8 +288,8 @@ public:
 
     void realizarSorteo() {
         int intentos = 0;
-        srand(static_cast<unsigned>(time(nullptr))
-              ^static_cast<unsigned>(reinterpret_cast<uintptr_t>(&intentos)));
+        //emma cambio aquí el srand, debido a que es mejor utilizarlo y llamarlo una sola vez en el main
+
         while (!intentarSorteo()) {
             if (++intentos > 10000) {
                 cout << "ERROR: no se encontro solucion";
@@ -311,7 +311,7 @@ public:
     }
     //Funcón para guardar los bombos en cada iteracion en un archivo .csv
     void guardarSorteo() const {
-        ofstream archivo("sorteo_grupos.csv", ios :: out | ios:: trunc);
+        ofstream archivo("sorteo_grupos.csv");
         archivo << "Grupo,Posicion,Pais,Confederacion,Ranking\n";
         for (int i = 0; i < total_grupos; i++) {
             Grupo* g = grupos[i];

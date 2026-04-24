@@ -5,6 +5,8 @@
 using namespace std;
 
 int main() {
+
+    srand(time(0));
     equipo* torneo[48];
     int cantidad_equipos = 0;
 

@@ -41,6 +41,10 @@ public:
         string pais;
         string dt;
         //Mate agrego este string para poder hacer el sorteo
+
+        // el string confederacion unicamente es para el header bombos.h
+        //pensamos en modificar el formato csv, pero es inncesario ya que unicamente se utiliza para los bombos
+
         string confederacion;
         int ranking;
         int goles_favor;
