@@ -131,7 +131,6 @@ void cargar_confederaciones(equipo* torneo[], int cantidad_equipos) {
     }
     archivo_bombos.close();
 }
-
 void guardar_datos(equipo* torneo[], int cantidad_equipos) {
 
     ofstream archivo_salida("jugadores.csv");
@@ -139,7 +138,6 @@ void guardar_datos(equipo* torneo[], int cantidad_equipos) {
 
     //ema aqui lo que hice fue reescribir casi el mismo csv casi hahaha
     archivo_salida << "Equipo,nombre,apellido,dorsal,PJ,goles,minutos j,asistencias,T.Amarillas,T.rojas,Faltas\n";
-
 
     for (int i = 0; i < cantidad_equipos; i++) {
         for (int j = 0; j < torneo[i]->contador_jugadores; j++) {
@@ -179,5 +177,38 @@ void cargar_arbitros(string lista_arbitros[], int& cantidad_arbitros) {
     }
     archivo.close();
 }
+//aqui ema pongo una nueva función para actualizar los datos del equipo
+void actualizar_equipos_csv(equipo* torneo[], int cantidad_equipos) {
+    // Abrimos el archivo en modo trunc para sobrescribir los datos viejos con los nuevos
+    ofstream archivo_salida("equipos.csv", ios::out | ios::trunc);
+
+    if (!archivo_salida.is_open()) {
+        cout << "Error: No se pudo abrir equipos.csv para actualizar." << endl;
+        return;
+    }
+
+    // Escribimos el encabezado tal cual lo tienes
+    archivo_salida << "pais,dt,ranking,ga,gc,pg,pe,pp,t.a,t.r,faltas\n";
+
+    for (int i = 0; i < cantidad_equipos; i++) {
+        equipo* e = torneo[i];
+        archivo_salida << e->pais << ","
+                       << e->dt << ","
+                       << e->ranking << ","
+                       << e->ga << ","
+                       << e->gc << ","
+                       << e->pg << ","
+                       << e->pe << ","
+                       << e->pp << ","
+                       << e->t_a << ","
+                       << e->t_r << ","
+                       << e->faltas << "\n";
+    }
+
+    archivo_salida.close();
+    cout << "Archivo equipos.csv actualizado correctamente." << endl;
+}
+
+
 
 #endif // FUNCIONES_AUXILIARES_H

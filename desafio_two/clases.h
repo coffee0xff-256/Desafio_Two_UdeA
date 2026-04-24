@@ -33,6 +33,8 @@ public:
         faltas = 0;
         nombre = "";
         apellido = "";
+
+
     }
 };
 
@@ -48,6 +50,14 @@ public:
         string confederacion;
         int ranking;
         int goles_favor;
+        int goles_contra;
+        int partidos_ganados;
+        int partidos_perdidos;
+        int partido_empatados;
+
+        int t_amarillas;
+        int t_rojas;
+        int faltas;
 
         //ema aqui viene la cosa, por cada equipo tenemos 26 jugadores así que lo que haremos será un arreglo dinamico para
         // esos jugadores que son 26
@@ -62,9 +72,12 @@ public:
         equipo(){
             ranking = 0;
             goles_favor=0;
+            goles_contra=0;
             contador_jugadores=0;
             pais="";
             dt = "";
+            confederacion="";
+
 
             for(int i = 0; i < 26; i++){
                 plantilla[i] = nullptr;

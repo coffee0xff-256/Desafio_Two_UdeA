@@ -7,6 +7,7 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
+    Partido.h \
     bombos.h \
     clases.h \
     fase_grupos.h \
