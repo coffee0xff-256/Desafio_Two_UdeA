@@ -50,15 +50,15 @@ public:
         string confederacion;
         int ranking;
         int goles_favor;
-        int goles_contra;
-        int partidos_ganados;
-        int partidos_perdidos;
-        int partido_empatados;
-
-        int t_amarillas;
-        int t_rojas;
-        int faltas;
-
+        //ema aqui pongo las otras variables que me faltan
+        int ga;      // Goles a favor (torneo)
+        int gc;      // Goles en contra
+        int pg;      // Partidos ganados
+        int pe;      // Partidos empatados
+        int pp;      // Partidos perdidos
+        int t_a;     // Tarjetas amarillas
+        int t_r;     // Tarjetas rojas
+        int faltas;  // Faltas totales del equipo
         //ema aqui viene la cosa, por cada equipo tenemos 26 jugadores así que lo que haremos será un arreglo dinamico para
         // esos jugadores que son 26
 
@@ -76,8 +76,14 @@ public:
             contador_jugadores=0;
             pais="";
             dt = "";
-            confederacion="";
-
+            ga = 0;
+            gc = 0;
+            pg = 0;
+            pe = 0;
+            pp = 0;
+            t_a = 0;
+            t_r = 0;
+            faltas = 0;
 
             for(int i = 0; i < 26; i++){
                 plantilla[i] = nullptr;

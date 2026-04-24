@@ -52,10 +52,43 @@ void cargar_datos(equipo* torneo[], int& cantidad_equipos) {
         campo_temp = extraer_palabra(linea);
         if(!campo_temp.empty()) nuevo_equipo->ranking = stoi(campo_temp);
 
+        // emma aqui tengo que editar esto para que me lea bien las columnas del csv equipos
+        campo_temp = extraer_palabra(linea);
+        if(!campo_temp.empty()) {
+            nuevo_equipo->ga = stoi(campo_temp);
+            nuevo_equipo->goles_favor = nuevo_equipo->ga; // Mantenemos este para tu funcion repartir_goles()
+        }
+
+        // Columna 5 gc
+        campo_temp = extraer_palabra(linea);
+        if(!campo_temp.empty()) nuevo_equipo->gc = stoi(campo_temp);
+
+        // Columna 6 pg
+        campo_temp = extraer_palabra(linea);
+        if(!campo_temp.empty()) nuevo_equipo->pg = stoi(campo_temp);
+
+        // Columna 7 pe
+        campo_temp = extraer_palabra(linea);
+        if(!campo_temp.empty()) nuevo_equipo->pe = stoi(campo_temp);
+
+        // Columna 8 pp
+        campo_temp = extraer_palabra(linea);
+        if(!campo_temp.empty()) nuevo_equipo->pp = stoi(campo_temp);
+
+        // Columna 9 t.a
+        campo_temp = extraer_palabra(linea);
+        if(!campo_temp.empty()) nuevo_equipo->t_a = stoi(campo_temp);
+
+        // Columna 10 t.r
+        campo_temp = extraer_palabra(linea);
+        if(!campo_temp.empty()) nuevo_equipo->t_r = stoi(campo_temp);
+
+        // Columna 11 faltas
+        campo_temp = extraer_palabra(linea);
+        if(!campo_temp.empty()) nuevo_equipo->faltas = stoi(campo_temp);
+
         campo_temp = extraer_palabra(linea);
         if(!campo_temp.empty()) nuevo_equipo->goles_favor = stoi(campo_temp);
-        //Nuevo campo para la confederación.
-        nuevo_equipo->confederacion = extraer_palabra(linea);
 
         torneo[cantidad_equipos] = nuevo_equipo;
         cantidad_equipos++;
@@ -210,5 +243,37 @@ void actualizar_equipos_csv(equipo* torneo[], int cantidad_equipos) {
 }
 
 
+
+//aqui ema pongo una nueva función para actualizar los datos del equipo
+void actualizar_equipos_csv(equipo* torneo[], int cantidad_equipos) {
+    // Abrimos el archivo en modo trunc para sobrescribir los datos viejos con los nuevos
+    ofstream archivo_salida("equipos.csv", ios::out | ios::trunc);
+
+    if (!archivo_salida.is_open()) {
+        cout << "Error: No se pudo abrir equipos.csv para actualizar." << endl;
+        return;
+    }
+
+    // Escribimos el encabezado tal cual lo tienes
+    archivo_salida << "pais,dt,ranking,ga,gc,pg,pe,pp,t.a,t.r,faltas\n";
+
+    for (int i = 0; i < cantidad_equipos; i++) {
+        equipo* e = torneo[i];
+        archivo_salida << e->pais << ","
+                       << e->dt << ","
+                       << e->ranking << ","
+                       << e->ga << ","
+                       << e->gc << ","
+                       << e->pg << ","
+                       << e->pe << ","
+                       << e->pp << ","
+                       << e->t_a << ","
+                       << e->t_r << ","
+                       << e->faltas << "\n";
+    }
+
+    archivo_salida.close();
+    cout << "Archivo equipos.csv actualizado correctamente." << endl;
+}
 
 #endif // FUNCIONES_AUXILIARES_H
