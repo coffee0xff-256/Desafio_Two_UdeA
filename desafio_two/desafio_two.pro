@@ -7,9 +7,9 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
-    Partido.h \
     bombos.h \
     clases.h \
+    eliminatorias.h \
     fase_grupos.h \
     funciones_auxiliares.h \
     math.h \

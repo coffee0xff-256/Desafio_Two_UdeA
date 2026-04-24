@@ -1,15 +1,25 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
-#include "clases.h"
-#include "funciones_auxiliares.h"
-#include "bombos.h"
-#include "math.h"
-#include "simulacion.h"
+#include <clases.h>
+#include <funciones_auxiliares.h>
+#include <bombos.h>
+#include <math.h>
+#include <simulacion.h>
+#include <eliminatorias.h>
+
+//librerias externa unicamente para que en terminal se vea mejor que es para ponerle un delay como en arduino
+
+#include <thread>
+#include <chrono>
+
 
 using namespace std;
 
 int main() {
+
+
+
 
     srand(time(0));
 
@@ -20,10 +30,15 @@ int main() {
     string arbitros[150];
     int cantidad_arbitros = 0;
 
+    string sedes[20];
+    int cantidad_sedes = 0;
+    cargar_sedes(sedes, cantidad_sedes);
+
     cout << "=== CARGA DE DATOS ===" << endl;
     cargar_datos(torneo, cantidad_equipos);
     cargar_confederaciones(torneo, cantidad_equipos);
     cargar_arbitros(arbitros, cantidad_arbitros);
+
 
     cout << "Datos cargados correctamente.\n" << endl;
 
@@ -33,6 +48,8 @@ int main() {
     sorteo.realizarSorteo();
     sorteo.imprimirGrupos();
 
+    this_thread::sleep_for(chrono::seconds(2)); // delay de 5segundos emma
+
     cout << "\n==================================================" << endl;
     cout << "       INICIANDO FASE DE GRUPOS (18 DIAS)         " << endl;
     cout << "==================================================" << endl;
@@ -41,6 +58,8 @@ int main() {
 
     //  las 3 jornadas de la fase de grupos
     for(int jornada = 0; jornada < 3; jornada++) {
+
+        this_thread::sleep_for(chrono::seconds(2));
 
         // ema iteramos sobre los 12 grupos, avanzando de 2 en 2 (A-B, C-D, E-F...)
         for(int g = 0; g < 12; g += 2) {
@@ -78,40 +97,54 @@ int main() {
                 string a1 = arbitros[rand() % cantidad_arbitros];
                 string a2 = arbitros[rand() % cantidad_arbitros];
                 string a3 = arbitros[rand() % cantidad_arbitros];
+                string s = sedes[rand() % cantidad_sedes];
 
-                Partido p1(local1, vis1, "Dia " + to_string(dia_actual), a1, a2, a3);
+
+                Partido p1(local1, vis1, "Dia " + to_string(dia_actual), a1, a2, a3,s);
                 cout << "--- Grupo " << grupo_actual->getLetra() << " ---" << endl;
                 p1.simular();
+
 
                 // --- PARTIDO 2 DEL GRUPO ---
                 string b1 = arbitros[rand() % cantidad_arbitros];
                 string b2 = arbitros[rand() % cantidad_arbitros];
                 string b3 = arbitros[rand() % cantidad_arbitros];
+                 s = sedes[rand() % cantidad_sedes];
 
-                Partido p2(local2, vis2, "Dia " + to_string(dia_actual), b1, b2, b3);
+                Partido p2(local2, vis2, "Dia " + to_string(dia_actual), b1, b2, b3,s);
                 p2.simular();
+
+
             }
             // avanzamos al siguiente dia una vez que juegan los 2 grupos
             dia_actual++;
-        }
+        this_thread::sleep_for(chrono::seconds(2));}
     }
 
 
+    equipo* clasificados_r16[32];
+    clasificar_r16(sorteo, clasificados_r16);
+
+
+
+    jugar_fases_finales(clasificados_r16, arbitros, cantidad_arbitros,sedes,cantidad_sedes);
+
     cout << "\n=== GUARDANDO RESULTADOS EN ARCHIVOS CSV ===" << endl;
 
-    //estadisticas de los jugadores
     guardar_datos(torneo, cantidad_equipos);
 
-    //  las estadisticas de los equipos
     actualizar_equipos_csv(torneo, cantidad_equipos);
 
     cout << "Simulacion terminada y datos persistidos." << endl;
 
-    // Liberar memoria
+    // 4. Liberamos la memoria
     for(int i = 0; i < cantidad_equipos; i++) {
         delete torneo[i];
     }
 
-    // emma de aqui empezare a trabajar con las otras pertes del torneo R
-
     return 0;}
+
+
+
+
+
