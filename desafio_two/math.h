@@ -2,7 +2,7 @@
 #define MATH_H
 #include <cstdlib>
 
-//emma aqui estarán las funciones para la simulación de goles
+//emma aqui estarán las funciones para la simulación de goles que estan en esa formula del desafio
 
 bool probabilidad(double porcentaje) {
     int random = rand() % 10000;

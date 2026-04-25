@@ -59,31 +59,29 @@ void cargar_datos(equipo* torneo[], int& cantidad_equipos) {
             nuevo_equipo->goles_favor = nuevo_equipo->ga; // Mantenemos este para tu funcion repartir_goles()
         }
 
-        // Columna 5 gc
+      //emma aqui utilizare columnas con el formato que están los csv
         campo_temp = extraer_palabra(linea);
         if(!campo_temp.empty()) nuevo_equipo->gc = stoi(campo_temp);
 
-        // Columna 6 pg
+
         campo_temp = extraer_palabra(linea);
         if(!campo_temp.empty()) nuevo_equipo->pg = stoi(campo_temp);
 
-        // Columna 7 pe
+
         campo_temp = extraer_palabra(linea);
         if(!campo_temp.empty()) nuevo_equipo->pe = stoi(campo_temp);
 
-        // Columna 8 pp
+
         campo_temp = extraer_palabra(linea);
         if(!campo_temp.empty()) nuevo_equipo->pp = stoi(campo_temp);
 
-        // Columna 9 t.a
+
         campo_temp = extraer_palabra(linea);
         if(!campo_temp.empty()) nuevo_equipo->t_a = stoi(campo_temp);
 
-        // Columna 10 t.r
         campo_temp = extraer_palabra(linea);
         if(!campo_temp.empty()) nuevo_equipo->t_r = stoi(campo_temp);
 
-        // Columna 11 faltas
         campo_temp = extraer_palabra(linea);
         if(!campo_temp.empty()) nuevo_equipo->faltas = stoi(campo_temp);
 
