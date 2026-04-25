@@ -51,14 +51,14 @@ public:
         int ranking;
         int goles_favor;
         //ema aqui pongo las otras variables que me faltan
-        int ga;      // Goles a favor (torneo)
-        int gc;      // Goles en contra
-        int pg;      // Partidos ganados
-        int pe;      // Partidos empatados
-        int pp;      // Partidos perdidos
-        int t_a;     // Tarjetas amarillas
-        int t_r;     // Tarjetas rojas
-        int faltas;  // Faltas totales del equipo
+        int ga;
+        int gc;
+        int pg;
+        int pe;
+        int pp;
+        int t_a;
+        int t_r;
+        int faltas;
         //ema aqui viene la cosa, por cada equipo tenemos 26 jugadores así que lo que haremos será un arreglo dinamico para
         // esos jugadores que son 26
 

@@ -136,12 +136,16 @@ public:
         goles_L_hoy = simularJugadores(local, meta_local);
 
         cout << "\nAnotaciones de " << visitante->pais << ":" << endl;
-         goles_V_hoy = simularJugadores(visitante, meta_visitante);
+        goles_V_hoy = simularJugadores(visitante, meta_visitante);
+
         // emma sumo estadisticas de goles
         local->gc += goles_V_hoy;
         visitante->gc += goles_L_hoy;
 
-        // determinar ganador o ir a penales
+        //esto es para  los minutos jugados
+        int minutos_partido = 90;
+
+        // determino ganador o desempate
         if (goles_L_hoy > goles_V_hoy) {
             local->pg += 1; visitante->pp += 1;
             ganador = local;
@@ -149,30 +153,67 @@ public:
             visitante->pg += 1; local->pp += 1;
             ganador = visitante;
         } else {
-            // EMPATE: Sumamos el empate a las estadísticas históricas
+
+
+            // empate y desempatamos mediante ranking fifa
             local->pe += 1; visitante->pe += 1;
+            minutos_partido = 120;
 
-            //  PENALES aleatorios
-            int penales_L = 0, penales_V = 0;
-            while (penales_L == penales_V) {
-                penales_L = (rand() % 4) + 2;
-                penales_V = (rand() % 4) + 2;
-            }
+            cout << "\n--- EMPATE EN TIEMPO REGLAMENTARIO. PRORROGA Y DESEMPATE POR RANKING ---" << endl;
 
-            cout << "\n--- TANDA DE PENALES ---" << endl;
-            cout << local->pais << " " << penales_L << " - " << penales_V << " " << visitante->pais << endl;
 
-            if (penales_L > penales_V) {
+            int pesoL = visitante->ranking > 0 ? visitante->ranking : 100;
+            int pesoV = local->ranking > 0 ? local->ranking : 100;
+            int total_peso = pesoL + pesoV;
+
+            //  aleatorio sesgad tipo como dijo arlinton
+            if ( (rand() % total_peso) < pesoL ) {
                 ganador = local;
-                cout << "-> " << local->pais << " avanza en penales!" << endl;
+                goles_L_hoy += 1;
+                cout << "-> " << local->pais << " anota y avanza por su peso en el Ranking FIFA!" << endl;
+
+
             } else {
                 ganador = visitante;
-                cout << "-> " << visitante->pais << " avanza en penales!" << endl;
-            }
-       }
+                goles_V_hoy += 1;
+                cout << "-> " << visitante->pais << " anota y avanza por su peso en el Ranking FIFA!" << endl;
 
-        cout << "RESULTADO FINAL: " << local->pais << " " << goles_L_hoy << " - "
-             << goles_V_hoy << " " << visitante->pais << "\n==============================\n";}
+            }
+        }
+
+
+
+        for(int i = 0; i < local->contador_jugadores; i++) {
+            if(local->plantilla[i]) local->plantilla[i]->minutos_jugados += minutos_partido;
+        }
+
+        for(int i = 0; i < visitante->contador_jugadores; i++) {
+            if(visitante->plantilla[i]) visitante->plantilla[i]->minutos_jugados += minutos_partido;
+        }
+
+
+
+        cout << "\nRESULTADO FINAL: " << local->pais << " " << goles_L_hoy << " - "
+             << goles_V_hoy << " " << visitante->pais << endl;
+
+        cout << "Goleadores " << local->pais << " (Dorsales): ";
+        for(int i = 0; i < goles_L_hoy; i++) {
+            if(local->contador_jugadores > 0) {
+                cout << "[" << local->plantilla[rand() % local->contador_jugadores]->dorsal << "] ";
+            }
+        }
+        if(goles_L_hoy == 0) cout << "Ninguno";
+
+        cout << "\nGoleadores " << visitante->pais << " (Dorsales): ";
+        for(int i = 0; i < goles_V_hoy; i++) {
+            if(visitante->contador_jugadores > 0) {
+                cout << "[" << visitante->plantilla[rand() % visitante->contador_jugadores]->dorsal << "] ";
+            }
+        }
+        if(goles_V_hoy == 0) cout << "Ninguno";
+
+        cout << "\n======================================================\n";
+    }
 
 
 };

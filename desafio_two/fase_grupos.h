@@ -2,8 +2,8 @@
 #define FASE_GRUPOS_H
 
 #include <iostream>
-#include "clases.h"
-#include "bombos.h"
+#include <clases.h>
+#include <bombos.h>
 
 using namespace std;
 
@@ -24,7 +24,6 @@ public:
 
     tabladegrupo() : n(0), letra('?') {}
 
-    // Función manual para alinear texto sin cstdio ni iomanip
     void imprimirEspacios(string texto, int ancho) {
         cout << texto;
         for (int i = 0; i < ancho - (int)texto.length(); i++) cout << " ";
@@ -36,6 +35,7 @@ public:
         for (int i = 0; i < ancho - (int)s.length(); i++) cout << " ";
     }
 
+
     void inicializar(Grupo* g, char l) {
         letra = l;
         n = (g->tamanio() > 4) ? 4 : g->tamanio();
@@ -43,6 +43,8 @@ public:
             filas[i].eq = g->getEquipo(i);
         }
     }
+
+
 
     void registrar_resultado(equipo* e1, int g1, equipo* e2, int g2) {
         for (int i = 0; i < n; i++) {

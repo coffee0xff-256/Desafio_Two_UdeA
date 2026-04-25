@@ -61,24 +61,24 @@ int main() {
 
     int dia_actual = 1;
 
-    //  las 3 jornadas de la fase de grupos
+
     for(int jornada = 0; jornada < 3; jornada++) {
 
 
 
-        // ema iteramos sobre los 12 grupos, avanzando de 2 en 2 (A-B, C-D, E-F...)
+        // ema iteramos sobre los 12 grupos, avanzando de 2 en 2
         for(int g = 0; g < 12; g += 2) {
             cout << "\n////////////////////////////////////////" << endl;
             cout << "               DIA " << dia_actual << endl;
             cout << "////////////////////////////////////////\n" << endl;
 
-            //  los 2 grupos programados para este dia
+
             for(int offset = 0; offset < 2; offset++) {
 
                 int indice_real_grupo = g + offset;
                 Grupo* grupo_actual = sorteo.getGrupo(g + offset);
 
-                //  4 equipos del grupo
+
                 equipo* eq1 = grupo_actual->getEquipo(0);
                 equipo* eq2 = grupo_actual->getEquipo(1);
                 equipo* eq3 = grupo_actual->getEquipo(2);
@@ -87,19 +87,19 @@ int main() {
                 equipo* local1; equipo* vis1;
                 equipo* local2; equipo* vis2;
 
-                //  cruces dependiendo de la jornada
-                if (jornada == 0) { // Fecha 1
+
+                if (jornada == 0) {
                     local1 = eq1; vis1 = eq2;
                     local2 = eq3; vis2 = eq4;
-                } else if (jornada == 1) { // Fecha 2
+                } else if (jornada == 1) {
                     local1 = eq1; vis1 = eq3;
                     local2 = eq2; vis2 = eq4;
-                } else { // Fecha 3
+                } else {
                     local1 = eq1; vis1 = eq4;
                     local2 = eq2; vis2 = eq3;
                 }
 
-                // --- PARTIDO 1 DEL GRUPO ---
+
                 // ema  3 arbitros al azar de arbitros.csv
                 string a1 = arbitros[rand() % cantidad_arbitros];
                 string a2 = arbitros[rand() % cantidad_arbitros];
@@ -113,7 +113,7 @@ int main() {
 
                 tablas[indice_real_grupo].registrar_resultado(local1,p1.goles_L_hoy,vis1,p1.goles_V_hoy);
 
-                // --- PARTIDO 2 DEL GRUPO ---
+
                 string b1 = arbitros[rand() % cantidad_arbitros];
                 string b2 = arbitros[rand() % cantidad_arbitros];
                 string b3 = arbitros[rand() % cantidad_arbitros];
@@ -125,7 +125,7 @@ int main() {
                 tablas[indice_real_grupo].registrar_resultado(local2,p2.goles_L_hoy,vis2,p2.goles_V_hoy);
 
             }
-            // avanzamos al siguiente dia una vez que juegan los 2 grupos
+
             dia_actual++;
         }
     }
@@ -144,16 +144,15 @@ int main() {
     equipo* puesto2 = nullptr;
     equipo* puesto3 = nullptr;
     equipo* puesto4 = nullptr;
-    equipo* r8[16]; // Para confederación en cuartos
-    equipo* r4[8];  // Para confederación en semis
+    equipo* r8[16];
+    equipo* r4[8];
 
     jugar_fases_finales(clasificados_r16, arbitros, cantidad_arbitros, sedes, cantidad_sedes,
                        puesto1, puesto2, puesto3, puesto4, r8, r4);
 
-   // mostrarResumenMundial(puesto1, puesto2, puesto3, puesto4, torneo, cantidad_equipos, clasificados_r16, clasificados_r8, clasificados_r4);
 
     if(puesto1 != nullptr) {
-        mostrarResumenMundial(puesto1, puesto2, puesto3, puesto4, torneo, cantidad_equipos, clasificados_r16, r8, r4);
+        mostrarResumenMundial(puesto1, puesto2, puesto3, puesto4, torneo, cantidad_equipos);
     }
 
     cout << "\n=== GUARDANDO RESULTADOS EN ARCHIVOS CSV ===" << endl;

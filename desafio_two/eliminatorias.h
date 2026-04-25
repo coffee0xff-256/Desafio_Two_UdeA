@@ -99,66 +99,69 @@ void simular_ronda(equipo* equipos_in[], int num_equipos, equipo* equipos_out[],
 
 //pongo esto aqui khanboy para no ensuciar mucho el main
 
-void jugar_fases_finales(equipo* octavos[], string arbitros[], int cantA, string sedes[], int cantS,
-                         equipo*& p1, equipo*& p2, equipo*& p3, equipo*& p4,
-                         equipo* r8[], equipo* r4[]) { // Agregamos r8 y r4 para las estadísticas
+void jugar_fases_finales(equipo* r16[], string arbitros[], int cantA, string sedes[], int cantS,
+                         equipo*& puesto1, equipo*& puesto2, equipo*& puesto3, equipo*& puesto4,
+                         equipo* r8[], equipo* r4[]) {
 
-    equipo* cuartos[16];
-    equipo* semis[8];
-    equipo* finalistas[4];
-    equipo* podio[2]; // campeón y subcampeón
-
+    cout << "\n=======================================";
+    cout << "\n        INICIAN LOS OCTAVOS            ";
     cout << "\n=======================================" << endl;
-    cout << "             OCTAVOS DE FINAL          " << endl;
-    cout << "=======================================\n" << endl;
-        simular_ronda(octavos, 16, cuartos, "octavos", arbitros, cantA, sedes, cantS);
-    // Guardamos para estadística C-5
-    for(int i=0; i<16; i++) r8[i] = cuartos[i];
+    simular_ronda(r16, 16, r8, "OCTAVOS DE FINAL", arbitros, cantA, sedes, cantS);
 
+    cout << "\n=======================================";
+    cout << "\n        INICIAN LOS CUARTOS            ";
     cout << "\n=======================================" << endl;
-    cout << "             CUARTOS DE FINAL          " << endl;
-    cout << "=======================================" << endl;
-    simular_ronda(cuartos, 8, semis, "cuartos", arbitros, cantA, sedes, cantS);
-    // Guardamos para estadística C-5
-    for(int i=0; i<8; i++) r4[i] = semis[i];
+    simular_ronda(r8, 8, r4, "CUARTOS DE FINAL", arbitros, cantA, sedes, cantS);
 
+    cout << "\n=======================================";
+    cout << "\n          SEMIFINALES                  ";
     cout << "\n=======================================" << endl;
-    cout << "               SEMIFINALES             " << endl;
-    cout << "=======================================" << endl;
-    simular_ronda(semis, 4, finalistas, "semifinal", arbitros, cantA, sedes, cantS);
+    equipo* finalistas[2];
+    simular_ronda(r4, 4, finalistas, "SEMIFINALES", arbitros, cantA, sedes, cantS);
 
-    // --- AQUÍ VA EL TRUCO PARA EL PUESTO 3 Y 4 ---
-    // Como tu simular_ronda solo guarda ganadores, p3 y p4 serían los perdedores de semis
-    p3 = finalistas[0]; // Simplificado: asignamos los semifinalistas
-    p4 = finalistas[1];
 
+    equipo* perdedor_semi1 = (finalistas[0] == r4[0]) ? r4[1] : r4[0];
+    equipo* perdedor_semi2 = (finalistas[1] == r4[2]) ? r4[3] : r4[2];
+
+    cout << "\n=======================================";
+    cout << "\n     PARTIDO POR EL TERCER PUESTO      ";
     cout << "\n=======================================" << endl;
-    cout << "               GRAN FINAL              " << endl;
-    cout << "=======================================" << endl;
-    simular_ronda(finalistas, 2, podio, "gran Final", arbitros, cantA, sedes, cantS);
+    Partido p_tercero(perdedor_semi1, perdedor_semi2, "TERCER PUESTO",
+                      arbitros[rand() % cantA], arbitros[rand() % cantA], arbitros[rand() % cantA],
+                      sedes[rand() % cantS]);
 
-    // ASIGNACIÓN FINAL PARA EL MAIN
-    p1 = podio[0];      // El campeón
-    // Para el subcampeón, buscamos quién de los finalistas NO es el campeón
-    p2 = (finalistas[0] == p1) ? finalistas[1] : finalistas[0];
+    p_tercero.simular_eliminatoria(); // Usa la función que editamos anteriormente
+
+    puesto3 = p_tercero.ganador;
+    puesto4 = (puesto3 == perdedor_semi1) ? perdedor_semi2 : perdedor_semi1;
+
+    cout << "\n=======================================";
+    cout << "\n             GRAN FINAL                ";
+    cout << "\n=======================================" << endl;
+    Partido p_final(finalistas[0], finalistas[1], "GRAN FINAL",
+                    arbitros[rand() % cantA], arbitros[rand() % cantA], arbitros[rand() % cantA],
+                    sedes[rand() % cantS]);
+
+    p_final.simular_eliminatoria();
+
+    puesto1 = p_final.ganador;
+    puesto2 = (puesto1 == finalistas[0]) ? finalistas[1] : finalistas[0];
 }
 
 void mostrarResumenMundial(
     equipo* campeon, equipo* subcampeon, equipo* tercero, equipo* cuarto,
-    equipo* todos[], int total_equipos,
-    equipo* r16[], equipo* r8[], equipo* r4[]
+    equipo* todos[], int total_equipos
     ) {
     cout << "\n==========================================================" << endl;
-    cout << "           RESUMEN FINAL: COPA MUNDIAL UdeA               " << endl;
+    cout << "           RESUMEN FINAL: COPA MUNDIAL UdeAWorldCup               " << endl;
     cout << "==========================================================" << endl;
 
-    // 1. Ranking de los 4 primeros
     cout << "1. CAMPEON: " << campeon->pais << endl;
     cout << "2. SUB-CAMPEON: " << subcampeon->pais << endl;
     cout << "3. TERCER PUESTO: " << tercero->pais << endl;
     cout << "4. CUARTO PUESTO: " << cuarto->pais << endl;
 
-    // 2. Máximo goleador del equipo campeón
+
     jugador* mejor_campeon = campeon->plantilla[0];
     for (int i = 1; i < campeon->contador_jugadores; i++) {
         if (campeon->plantilla[i]->goles > mejor_campeon->goles) {
@@ -167,8 +170,8 @@ void mostrarResumenMundial(
     }
     cout << "\nGoleador del Campeon: " << mejor_campeon->nombre << " (" << mejor_campeon->goles << " goles)" << endl;
 
-    // 3. Los tres mayores goleadores de toda la copa
-    // Creamos un podio manual
+    //emma cogemos los 3 mayores goleadores del torneo
+
     jugador* top1 = nullptr; jugador* top2 = nullptr; jugador* top3 = nullptr;
     int g1 = -1, g2 = -1, g3 = -1;
 
@@ -192,34 +195,13 @@ void mostrarResumenMundial(
     if (top2) cout << "2. " << top2->nombre << " " << top2->apellido << " (" << g2 << " goles)" << endl;
     if (top3) cout << "3. " << top3->nombre << " " << top3->apellido << " (" << g3 << " goles)" << endl;
 
-    // 4. Equipo con más goles históricos (GA actualizado)
     equipo* historico = todos[0];
     for (int i = 1; i < total_equipos; i++) {
         if (todos[i]->ga > historico->ga) historico = todos[i];
     }
     cout << "\nEquipo con mas goles historicos totales: " << historico->pais << " (" << historico->ga << " goles)" << endl;
 
-    // 5. Confederación con mayor presencia (Función de conteo manual)
-    auto obtenerMayorConf = [](equipo* lista[], int tam) {
-        if (tam == 0) return string("N/A");
-        string confs[] = {"UEFA", "CONMEBOL", "CONCACAF", "CAF", "AFC", "OFC"};
-        int conteos[6] = {0,0,0,0,0,0};
-        for (int i = 0; i < tam; i++) {
-            for (int j = 0; j < 6; j++) {
-                if (lista[i]->confederacion == confs[j]) conteos[j]++;
-            }
-        }
-        int maxIdx = 0;
-        for (int i = 1; i < 6; i++) {
-            if (conteos[i] > conteos[maxIdx]) maxIdx = i;
-        }
-        return confs[maxIdx];
-    };
 
-    cout << "\nMAYOR PRESENCIA POR CONFEDERACION:" << endl;
-    cout << "R16 (Octavos): " << obtenerMayorConf(r16, 32) << endl;
-    cout << "R8 (Cuartos):  " << obtenerMayorConf(r8, 16) << endl;
-    cout << "R4 (Semis):    " << obtenerMayorConf(r4, 8) << endl;
 }
 
 
