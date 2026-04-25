@@ -18,8 +18,8 @@ public:
     string arb1, arb2, arb3;
     string sede = "";
 
-
-
+    int goles_L_hoy = 0;
+    int goles_V_hoy = 0; //aqui ema me toco poner estos atributos publicos
 
     double posesion_local = 0;
     double posesion_visitante = 0;
@@ -78,7 +78,6 @@ public:
                 goles_hoy++;
                 cout << "  -> Gol de: " << j->nombre << " " << j->apellido << " (#" << j->dorsal << ")\n";
 
-                this_thread::sleep_for(chrono::seconds(1/2));
 
 
             }
@@ -98,10 +97,10 @@ public:
         int meta_visitante = calcularGolesEsperados(visitante, local);
 
         cout << "\nAnotaciones de " << local->pais << ":" << endl;
-        int goles_L_hoy = simularJugadores(local, meta_local);
+         goles_L_hoy = simularJugadores(local, meta_local);
 
         cout << "\nAnotaciones de " << visitante->pais << ":" << endl;
-        int goles_V_hoy = simularJugadores(visitante, meta_visitante);
+        goles_V_hoy = simularJugadores(visitante, meta_visitante);
 
         local->gc += goles_V_hoy;
         visitante->gc += goles_L_hoy;
@@ -116,7 +115,7 @@ public:
 
         cout << "RESULTADO FINAL: " << local->pais << " " << goles_L_hoy << " - "
              << goles_V_hoy << " " << visitante->pais << "\n==============================\n";
-        this_thread::sleep_for(chrono::seconds(2));
+
     }
 
     equipo* ganador = nullptr;
@@ -134,10 +133,10 @@ public:
         int meta_visitante = calcularGolesEsperados(visitante, local);
 
         cout << "\nAnotaciones de " << local->pais << ":" << endl;
-        int goles_L_hoy = simularJugadores(local, meta_local);
+        goles_L_hoy = simularJugadores(local, meta_local);
 
         cout << "\nAnotaciones de " << visitante->pais << ":" << endl;
-        int goles_V_hoy = simularJugadores(visitante, meta_visitante);
+         goles_V_hoy = simularJugadores(visitante, meta_visitante);
         // emma sumo estadisticas de goles
         local->gc += goles_V_hoy;
         visitante->gc += goles_L_hoy;
@@ -170,11 +169,10 @@ public:
                 ganador = visitante;
                 cout << "-> " << visitante->pais << " avanza en penales!" << endl;
             }
-       this_thread::sleep_for(chrono::seconds(2)); }
+       }
 
         cout << "RESULTADO FINAL: " << local->pais << " " << goles_L_hoy << " - "
-             << goles_V_hoy << " " << visitante->pais << "\n==============================\n";
-   this_thread::sleep_for(chrono::seconds(2)); }
+             << goles_V_hoy << " " << visitante->pais << "\n==============================\n";}
 
 
 };
