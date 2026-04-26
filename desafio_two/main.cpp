@@ -8,18 +8,10 @@
 #include <simulacion.h>
 #include <eliminatorias.h>
 #include <fase_grupos.h>
-
-//librerias externa unicamente para que en terminal se vea mejor que es para ponerle un delay como en arduino
-
-#include <thread>
-#include <chrono>
-
-
+#include <memoria.h>
 using namespace std;
 
 int main() {
-
-
 
 
     srand(time(0));
@@ -33,22 +25,30 @@ int main() {
 
     string sedes[20];
     int cantidad_sedes = 0;
-    cargar_sedes(sedes, cantidad_sedes);
 
     cout << "=== CARGA DE DATOS ===" << endl;
+    //cargar_datos(torneo, cantidad_equipos);
+    //cargar_confederaciones(torneo, cantidad_equipos);
+    //cargar_arbitros(arbitros, cantidad_arbitros);
+
+    memoria::iniciar();
+    cargar_sedes(sedes, cantidad_sedes);
     cargar_datos(torneo, cantidad_equipos);
     cargar_confederaciones(torneo, cantidad_equipos);
     cargar_arbitros(arbitros, cantidad_arbitros);
-
-
-    cout << "Datos cargados correctamente.\n" << endl;
+    memoria::sumar(cantidad_equipos * 27 + cantidad_arbitros + cantidad_sedes); //
+    cout << "Datos cargados correctamente.\n";
+    memoria::reportar("Carga de datos correctamente", torneo, cantidad_equipos);
 
     cout << "=== SORTEO DEL MUNDIAL UdeA WorldCup ===" << endl;
+
+    memoria::iniciar();
     Sorteo sorteo;
     sorteo.conformarbombos(torneo, cantidad_equipos);
     sorteo.realizarSorteo();
     sorteo.imprimirGrupos();
-
+    memoria::sumar(48 * 4 + cantidad_equipos);
+    memoria::reportar("Sorteo de grupos", torneo, cantidad_equipos);
 
     tabladegrupo tablas[12];
     for(int i = 0; i < 12; i++) {
@@ -59,13 +59,10 @@ int main() {
     cout << "       INICIANDO FASE DE GRUPOS (18 DIAS)         " << endl;
     cout << "==================================================" << endl;
 
+    memoria::iniciar();
+
     int dia_actual = 1;
-
-
     for(int jornada = 0; jornada < 3; jornada++) {
-
-
-
         // ema iteramos sobre los 12 grupos, avanzando de 2 en 2
         for(int g = 0; g < 12; g += 2) {
             cout << "\n////////////////////////////////////////" << endl;
@@ -117,7 +114,7 @@ int main() {
                 string b1 = arbitros[rand() % cantidad_arbitros];
                 string b2 = arbitros[rand() % cantidad_arbitros];
                 string b3 = arbitros[rand() % cantidad_arbitros];
-                 s = sedes[rand() % cantidad_sedes];
+                s = sedes[rand() % cantidad_sedes];
 
                 Partido p2(local2, vis2, "Dia " + to_string(dia_actual), b1, b2, b3,s);
                 p2.simular();
@@ -137,7 +134,13 @@ int main() {
         tablas[i].imprimirTablaCompleta();
     }
 
+    memoria::sumar(36 * 22 + 12 * 12);
+    memoria::reportar("Fase de grupos", torneo, cantidad_equipos);
+
     equipo* clasificados_r16[32];
+
+    memoria::iniciar();
+
     clasificar_r16(sorteo, clasificados_r16);
 
     equipo* puesto1 = nullptr;
@@ -148,11 +151,18 @@ int main() {
     equipo* r4[8];
 
     jugar_fases_finales(clasificados_r16, arbitros, cantidad_arbitros, sedes, cantidad_sedes,
-                       puesto1, puesto2, puesto3, puesto4, r8, r4);
+                        puesto1, puesto2, puesto3, puesto4, r8, r4);
+
+    memoria::sumar(32*22);
+    memoria::reportar("Fases finales", torneo, cantidad_equipos);
 
 
     if(puesto1 != nullptr) {
         mostrarResumenMundial(puesto1, puesto2, puesto3, puesto4, torneo, cantidad_equipos);
+        memoria::iniciar();
+        memoria::sumar(cantidad_equipos * 26);
+        memoria::reportar("Estadisticas", torneo, cantidad_equipos);
+
     }
 
     cout << "\n=== GUARDANDO RESULTADOS EN ARCHIVOS CSV ===" << endl;
@@ -167,12 +177,6 @@ int main() {
     for(int i = 0; i < cantidad_equipos; i++) {
         delete torneo[i];
     }
-
-
-
-
-
-
     return 0;}
 
 

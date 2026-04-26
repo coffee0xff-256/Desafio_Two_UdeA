@@ -13,4 +13,5 @@ HEADERS += \
     fase_grupos.h \
     funciones_auxiliares.h \
     math.h \
+    memoria.h \
     simulacion.h
